@@ -41,6 +41,20 @@ function createTasksContainer(){
     taskContainer.classList.add("task-container");
     return taskContainer;
 }
+function createProjectContainer(project){
+    const projectContainer = document.createElement("div");
+    projectContainer.classList.add("project-container");
+
+    const projectTitle = document.createElement("h2");
+    projectTitle.textContent = `${project.title}`;
+
+    projectContainer.append(projectTitle);
+
+    projectContainer.dataset.id = project.id;
+    
+    return projectContainer;
+}
+
 function createATodo(todo){
     const task = document.createElement("div");
     task.classList.add("task");
@@ -62,10 +76,19 @@ function createATodo(todo){
     checklist.type = "checkbox";
     checklist.checked = todo.checklist;
     
-    task.append(description,dueDate,priority,checklist);
+    task.append(title,description,dueDate,priority,checklist);
 
     return task;
 
 }
-
-export {createSidebar, createMain, createTasksContainer, createATodo};
+function renderProject(project){
+    const taskContainer = createTasksContainer();
+    const projectContainer = createProjectContainer(project);
+    for(let i = 0; i < project.todos.length; i++){
+        const taskElement = createATodo(project.todos[i]);
+        taskContainer.append(taskElement);
+    }
+    projectContainer.append(taskContainer);
+    return projectContainer;
+}
+export {createSidebar, createMain, createTasksContainer, createATodo, renderProject};

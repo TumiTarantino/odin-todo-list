@@ -53,3 +53,7 @@ aside{
     min-height: 2em;
     min-width: 40%;
 }
+
+.project-container h2{
+    color: var(--color-primary);
+}
