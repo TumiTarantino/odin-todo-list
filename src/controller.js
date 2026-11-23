@@ -1,0 +1,1 @@
+// Coordinates the events of the app between each other

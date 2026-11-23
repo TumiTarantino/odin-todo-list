@@ -51,10 +51,22 @@ function createProjectContainer(project){
     projectContainer.append(projectTitle);
 
     projectContainer.dataset.id = project.id;
-    
+
     return projectContainer;
 }
 
+function createAProject(project){
+    const projectDiv = document.createElement("div");
+    projectDiv.classList.add("project");
+    projectDiv.dataset.id = project.id;
+
+    const projectTitle = document.createElement("p");
+    projectTitle.textContent = project.title
+
+    projectDiv.append(projectTitle);
+
+    return projectDiv;
+}
 function createATodo(todo){
     const task = document.createElement("div");
     task.classList.add("task");
@@ -91,4 +103,14 @@ function renderProject(project){
     projectContainer.append(taskContainer);
     return projectContainer;
 }
-export {createSidebar, createMain, createTasksContainer, createATodo, renderProject};
+
+function renderProjects(projects){ //this 'projects' dont exist yet, just be aware
+    const projectsContainer = document.createElement("div");
+    for(let i = 0; i < projects.length; i++){
+        const project = createAProject(projects[i]);
+        projectsContainer.append(project);
+    }
+    return projectsContainer;
+    
+}
+export {createSidebar, createMain, createTasksContainer, createATodo, renderProject, renderProjects};
