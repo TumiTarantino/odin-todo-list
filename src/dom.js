@@ -32,15 +32,15 @@ function createSidebar(){
 
 function createMain(){
     const main = document.createElement("main");
-
-    const taskContainer = document.createElement("div");
-    taskContainer.classList.add("task-container");
-    
-    main.append(taskContainer);
+    //Main cannot have create taskscontainer, since for now, main will either show a project of tasks or a task itself, so is this function even really needed?
     return main;
 
 }
-
+function createTasksContainer(){
+    const taskContainer = document.createElement("div");
+    taskContainer.classList.add("task-container");
+    return taskContainer;
+}
 function createATodo(todo){
     const task = document.createElement("div");
     task.classList.add("task");
@@ -68,4 +68,4 @@ function createATodo(todo){
 
 }
 
-export {createSidebar, createMain, createATodo};
+export {createSidebar, createMain, createTasksContainer, createATodo};
