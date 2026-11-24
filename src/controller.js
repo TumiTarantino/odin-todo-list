@@ -7,7 +7,7 @@ Each project should be a clickable button which will display the todos in that p
 
 import Todo from './todo.js'
 import Project from './project.js'
-import { createSidebar, createMain, createTasksContainer, createATodo, createCreateProjectButton, createProjectForm, renderProject, renderProjects} from "./dom.js";
+import { createSidebar, createMain, createTasksContainer, createATodo, createCreateProjectButton, createProjectForm, createTodoButton, createTodoForm, renderProject, renderProjects} from "./dom.js";
 
 const myTask = new Todo("BossTee", "I am working on it", "2026-11-22", "high", true);
 const myTask2 = new Todo("Cole", "arr", "2026-54-22", "MEDIUM", true);
@@ -39,11 +39,48 @@ function initalizeapp(){
     const newProjectButton = createCreateProjectButton();
     const projectForm = createProjectForm();
     const form = projectForm.querySelector("#projectForm"); //Selects the form inside the dialog
+    const newTodoButton = createTodoButton();
+    const todoForm = createTodoForm();
+    const formTodo = todoForm.querySelector("#todoForm");
 
     let selectedProject = project1;
 
     //Event listeners
-    form.addEventListener("submit", (e) => {
+   
+
+    formTodo.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Pass the submitted form (event.target) to FormData
+        const formData = new FormData(e.target);
+    
+        // Convert to a standard JavaScript object
+        const data = Object.fromEntries(formData);
+
+        //Allows checklist to be submitted as a bool
+        const checklist = formTodo.elements.checklist.checked;
+
+        //Creates a new Project object
+        const newTodo = new Todo(data.title, data.description, data.dueDate, data.priority, checklist); 
+        
+        //Appends project to the projects array
+        console.log(newTodo);
+        selectedProject.addTodo(newTodo);
+        
+
+        //Here we need to find out how to render the new todo
+        main.replaceChildren(renderProject(selectedProject));
+        //Closes dialog
+        todoForm.close();
+
+        //Emptys the contents of the form
+        formTodo.reset();
+    })
+    newTodoButton.addEventListener("click", () => {
+        todoForm.showModal();
+    })
+
+     form.addEventListener("submit", (e) => {
         e.preventDefault();
 
         // Pass the submitted form (event.target) to FormData
@@ -100,7 +137,7 @@ function initalizeapp(){
     main.append(renderProject(selectedProject)); // the should call the relevant project at the start
 
     body.replaceChildren();
-    body.append(sidebar,main, projectForm);
+    body.append(sidebar,main, projectForm, todoForm,newTodoButton);
 }
 
 function renderCurrentView(){

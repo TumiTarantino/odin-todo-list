@@ -130,6 +130,97 @@ function createATodo(todo){
     return task;
 
 }
+
+function createTodoButton(){
+    const todoButton = document.createElement("button");
+    todoButton.classList.add("todo-button");
+    todoButton.textContent = "+ New Todo";
+    return todoButton;
+}
+
+function createTodoForm(){
+    const dialog = document.createElement("dialog");
+    const form = document.createElement('form');
+    form.id = 'todoForm';
+    form.method = "dialog";
+
+    // Creates a label for relevant input
+    const todoTitleLabel = document.createElement('label');
+    todoTitleLabel.textContent = 'Title: ';
+    todoTitleLabel.htmlFor = 'todo-title';
+
+    //Create an input associated with relevent label
+    const todoTitleInput = document.createElement('input');
+    todoTitleInput.type = 'text';
+    todoTitleInput.id = 'todo-title';
+    todoTitleInput.name = 'title';
+    todoTitleInput.required = true;
+
+     // Creates a label for relevant input
+    const todoDesLabel = document.createElement('label');
+    todoDesLabel.textContent = 'Description: ';
+    todoDesLabel.htmlFor = 'todo-description';
+
+    //Create an input associated with relevent label
+    const todoDesInput = document.createElement('input');
+    todoDesInput.type = 'text';
+    todoDesInput.id = 'todo-description';
+    todoDesInput.name = 'description';
+    todoDesInput.required = true;
+
+     // Creates a label for relevant input
+    const todoDateLabel = document.createElement('label');
+    todoDateLabel.textContent = 'Due Date: ';
+    todoDateLabel.htmlFor = 'todo-date';
+
+    //Create an input associated with relevent label
+    const todoDateInput = document.createElement('input');
+    todoDateInput.type = 'text'; // this probaly needs to change a more appropriate format
+    todoDateInput.id = 'todo-date';
+    todoDateInput.name = 'dueDate';
+    todoDateInput.required = true;
+
+     // Creates a label for relevant input
+    const todoPriorityLabel = document.createElement('label');
+    todoPriorityLabel.textContent = 'Priority: ';
+    todoPriorityLabel.htmlFor = 'todo-priority';
+
+    //Create an input associated with relevent label
+    const todoPriorityInput = document.createElement('input');
+    todoPriorityInput.type = 'text';
+    todoPriorityInput.placeholder = 'high, medium or low';
+    todoPriorityInput.id = 'todo-priority';
+    todoPriorityInput.name = 'priority';
+    todoPriorityInput.required = true;
+
+    // Creates a label for relevant input
+    const todoChecklistLabel = document.createElement('label');
+    todoChecklistLabel.textContent = 'Checklist: ';
+    todoChecklistLabel.htmlFor = 'todo-checklist';
+
+    //Create an input associated with relevent label
+    const todoChecklistInput = document.createElement('input');
+    todoChecklistInput.type = 'checkbox';
+    todoChecklistInput.id = 'todo-checklist';
+    todoChecklistInput.name = 'checklist';
+    todoChecklistInput.required = false;
+
+    // 3. Create a submit button
+    const submitBtn = document.createElement('button');
+    submitBtn.type = 'submit';
+    submitBtn.textContent = 'Submit';
+
+    // 4. Assemble and add the form to the page
+    form.append(
+        todoTitleLabel, todoTitleInput,
+        todoDesLabel, todoDesInput,
+        todoDateLabel, todoDateInput,
+        todoPriorityLabel, todoPriorityInput,
+        todoChecklistLabel, todoChecklistInput,
+        submitBtn);
+    dialog.append(form)
+    return dialog;
+}
 function renderProject(project){
     const taskContainer = createTasksContainer();
     const projectContainer = createProjectContainer(project);
@@ -151,4 +242,4 @@ function renderProjects(projects){ //this 'projects' dont exist yet, just be awa
     return projectsContainer;
     
 }
-export {createSidebar, createMain, createTasksContainer, createATodo, createCreateProjectButton, createProjectForm, renderProject, renderProjects};
+export {createSidebar, createMain, createTasksContainer, createATodo, createCreateProjectButton, createProjectForm, createTodoButton, createTodoForm,renderProject, renderProjects};
