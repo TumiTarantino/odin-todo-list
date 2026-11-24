@@ -18,13 +18,13 @@ function createSidebar(){
     const sidebar = document.createElement("div");
     sidebar.classList.add("sidebar");
 
-    const sbTasks = document.createElement("p");
-    sbTasks.textContent = "Tasks";
+    //const sbTasks = document.createElement("p");
+    //sbTasks.textContent = "Tasks";
 
     const sbProjects = document.createElement("p");
     sbProjects.textContent = "Projects";
 
-    sidebar.append(sbTasks,sbProjects);
+    sidebar.append(sbProjects);
     aside.append(top, sidebar);
 
     return aside;
@@ -56,14 +56,15 @@ function createProjectContainer(project){
 }
 
 function createAProject(project){
-    const projectDiv = document.createElement("div");
+    const projectDiv = document.createElement("button");
     projectDiv.classList.add("project");
     projectDiv.dataset.id = project.id;
+    projectDiv.textContent = project.title
 
-    const projectTitle = document.createElement("p");
-    projectTitle.textContent = project.title
+    //const projectTitle = document.createElement("p");
+    //projectTitle.textContent = project.title
 
-    projectDiv.append(projectTitle);
+    //projectDiv.append(projectTitle);
 
     return projectDiv;
 }
@@ -106,6 +107,7 @@ function renderProject(project){
 
 function renderProjects(projects){ //this 'projects' dont exist yet, just be aware
     const projectsContainer = document.createElement("div");
+    projectsContainer.classList.add("projects-container");
     for(let i = 0; i < projects.length; i++){
         const project = createAProject(projects[i]);
         projectsContainer.append(project);
