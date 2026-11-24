@@ -7,7 +7,7 @@ Each project should be a clickable button which will display the todos in that p
 
 import Todo from './todo.js'
 import Project from './project.js'
-import { createSidebar, createMain, createTasksContainer, createATodo, renderProject, renderProjects} from "./dom.js";
+import { createSidebar, createMain, createTasksContainer, createATodo, createCreateProjectButton, createProjectForm, renderProject, renderProjects} from "./dom.js";
 
 const myTask = new Todo("BossTee", "I am working on it", "2026-11-22", "high", true);
 const myTask2 = new Todo("Cole", "arr", "2026-54-22", "MEDIUM", true);
@@ -36,7 +36,40 @@ function initalizeapp(){
     const sidebar = createSidebar();
     const main = createMain();
     const projectsContainer = renderProjects(projects);
+    const newProjectButton = createCreateProjectButton();
+    const projectForm = createProjectForm();
+    const form = projectForm.querySelector("#projectForm"); //Selects the form inside the dialog
 
+    let selectedProject = project1;
+
+    //Event listeners
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Pass the submitted form (event.target) to FormData
+        const projectData = new FormData(e.target);
+    
+        // Convert to a standard JavaScript object
+        const data = Object.fromEntries(projectData);
+
+        //Creates a new Project object
+        const newProject = new Project(data.title); 
+        
+        //Appends project to the projects array
+        projects.push(newProject);
+        console.log(projects);
+
+        //Selects new project as the current project
+        selectedProject = newProject;
+        //Closes dialog
+        projectForm.close();
+
+        //Emptys the contents of the form
+        form.reset();
+    })
+    newProjectButton.addEventListener("click", () => {
+        projectForm.showModal();
+    })
     projectsContainer.addEventListener("click", (e) => {
         //console.log(`Target: ${e.target.closest(".project")}`);// Target is the actual element that calls the listener
         //console.log(`CurrentTarget ${e.currentTarget}`) //current is the element that wants/created the listener
@@ -45,23 +78,24 @@ function initalizeapp(){
         main.replaceChildren();
 
         const projectElement = e.target.closest(".project");
-        let selectedProject = null;
         // this is the id of the selected project, projectElement.dataset.id, how do i get the corresponding id of the project?
         for(let i = 0; i < projects.length; i++){
             if(projectElement.dataset.id === projects[i].id){
                 selectedProject = projects[i];
             }
         }
-        console.log(selectedProject)
         main.append(renderProject(selectedProject));
     })
 
-    sidebar.append(projectsContainer);// this should be called whenever the projects sidebar is called
-    main.append(renderProject(project1)); // the should call the relevant project at the start
+    sidebar.append(projectsContainer, newProjectButton);// this should be called whenever the projects sidebar is called
+    main.append(renderProject(selectedProject),projectForm); // the should call the relevant project at the start
 
     body.replaceChildren();
     body.append(sidebar,main);
 }
 
+function renderCurrentView(){
+
+}
 
 export{initalizeapp}

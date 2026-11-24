@@ -5,6 +5,7 @@ export default class Project{
         this.id = crypto.randomUUID();
         this.title = title;
         this.todos = [];
+        //Might add description property later
     }
     addTodo(todo){
         if(!(todo instanceof Todo)){

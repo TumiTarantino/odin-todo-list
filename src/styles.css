@@ -39,13 +39,14 @@ body{
     background-color: var(--color-background);
     display: grid;
     grid-template-columns: 1fr 2fr;
-    color: var(--color-background);
+    color: var(--color-dark);
     font-family: 'Courier New', Courier, monospace;
     min-height: 100dvh;
 }
 
 aside{
     background-color: var(--color-dark);
+    color: var(--color-background);
 }
 
 .task{

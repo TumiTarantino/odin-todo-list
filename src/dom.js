@@ -36,6 +36,42 @@ function createMain(){
     return main;
 
 }
+
+function createCreateProjectButton(){
+    const button = document.createElement("button");
+    button.classList.add("create-project-button");
+    button.textContent = "+ New Project";
+
+    return button
+}
+
+function createProjectForm(){
+    const dialog = document.createElement("dialog");
+    const form = document.createElement('form');
+    form.id = 'projectForm';
+    form.method = "dialog";
+
+    // 2. Create a label and text input
+    const projectLabel = document.createElement('label');
+    projectLabel.textContent = 'Title: ';
+    projectLabel.htmlFor = 'projectTitle';
+
+    const projectInput = document.createElement('input');
+    projectInput.type = 'text';
+    projectInput.id = 'projectTitle';
+    projectInput.name = 'title';
+    projectInput.required = true;
+
+    // 3. Create a submit button
+    const submitBtn = document.createElement('button');
+    submitBtn.type = 'submit';
+    submitBtn.textContent = 'Submit';
+
+    // 4. Assemble and add the form to the page
+    form.append(projectLabel, projectInput, submitBtn);
+    dialog.append(form)
+    return dialog;
+}
 function createTasksContainer(){
     const taskContainer = document.createElement("div");
     taskContainer.classList.add("task-container");
@@ -115,4 +151,4 @@ function renderProjects(projects){ //this 'projects' dont exist yet, just be awa
     return projectsContainer;
     
 }
-export {createSidebar, createMain, createTasksContainer, createATodo, renderProject, renderProjects};
+export {createSidebar, createMain, createTasksContainer, createATodo, createCreateProjectButton, createProjectForm, renderProject, renderProjects};
