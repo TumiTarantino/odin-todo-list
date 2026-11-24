@@ -59,8 +59,17 @@ function initalizeapp(){
         projects.push(newProject);
         console.log(projects);
 
-        //Selects new project as the current project
+        //Selects new project as the current project and renders it
         selectedProject = newProject;
+        main.replaceChildren(renderProject(selectedProject));
+
+        //projectsContainer.replaceChildren(renderProjects(projects));
+
+        const updatedProjects = renderProjects(projects);
+        
+        //This replaces the current container with the children of the updated projects, so it doesnt add the div
+        projectsContainer.replaceChildren(...updatedProjects.children);
+
         //Closes dialog
         projectForm.close();
 
@@ -88,10 +97,10 @@ function initalizeapp(){
     })
 
     sidebar.append(projectsContainer, newProjectButton);// this should be called whenever the projects sidebar is called
-    main.append(renderProject(selectedProject),projectForm); // the should call the relevant project at the start
+    main.append(renderProject(selectedProject)); // the should call the relevant project at the start
 
     body.replaceChildren();
-    body.append(sidebar,main);
+    body.append(sidebar,main, projectForm);
 }
 
 function renderCurrentView(){
