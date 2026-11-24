@@ -12,7 +12,7 @@ function createSidebar(){
     const top = document.createElement("div");
     const topTitle = document.createElement("h1");
     top.classList.add("top");
-    topTitle.textContent = "TheeToDOoList";
+    topTitle.textContent = "TheeToDoList";
     top.append(topTitle);
 
     const sidebar = document.createElement("div");

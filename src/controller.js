@@ -139,9 +139,18 @@ function initalizeapp(){
     body.replaceChildren();
     body.append(sidebar,main, projectForm, todoForm,newTodoButton);
 }
-
+//Below here was done hapzardously 
 function renderCurrentView(){
 
 }
-
+function deleteProject(project){
+    //It needs to be deleted from the projects array as well as from the dom
+    const index = projects.indexOf(project.id);
+    if (index !== -1) {
+        projects.splice(index, 1);
+    }
+}
+function editProject(project){
+    //Reuse the project form to get the input
+}
 export{initalizeapp}
