@@ -7,7 +7,7 @@ Each project should be a clickable button which will display the todos in that p
 
 import Todo from './todo.js'
 import Project from './project.js'
-import { createSidebar, createMain, createTasksContainer, createATodo, createCreateProjectButton, createProjectForm, createTodoButton, createTodoForm, renderProject, renderProjects} from "./dom.js";
+import { createSidebar, createMain, createTasksContainer, createATodo, createCreateProjectButton, createProjectForm, deleteProjectButton,createTodoButton, createTodoForm, renderProject, renderProjects} from "./dom.js";
 
 const myTask = new Todo("BossTee", "I am working on it", "2026-11-22", "high", true);
 const myTask2 = new Todo("Cole", "arr", "2026-54-22", "MEDIUM", true);
@@ -29,6 +29,7 @@ project2.addTodo(theTask2);
 project2.addTodo(theTask3);
 
 const projects = [project1,project2];
+let selectedProject = project1;
 
 //Functions
 function initalizeapp(){
@@ -43,7 +44,7 @@ function initalizeapp(){
     const todoForm = createTodoForm();
     const formTodo = todoForm.querySelector("#todoForm");
 
-    let selectedProject = project1;
+    
 
     //Event listeners
    
@@ -68,8 +69,7 @@ function initalizeapp(){
         selectedProject.addTodo(newTodo);
         
 
-        //Here we need to find out how to render the new todo
-        main.replaceChildren(renderProject(selectedProject));
+        renderCurrentView();
         //Closes dialog
         todoForm.close();
 
@@ -98,14 +98,7 @@ function initalizeapp(){
 
         //Selects new project as the current project and renders it
         selectedProject = newProject;
-        main.replaceChildren(renderProject(selectedProject));
-
-        //projectsContainer.replaceChildren(renderProjects(projects));
-
-        const updatedProjects = renderProjects(projects);
-        
-        //This replaces the current container with the children of the updated projects, so it doesnt add the div
-        projectsContainer.replaceChildren(...updatedProjects.children);
+        renderCurrentView();
 
         //Closes dialog
         projectForm.close();
@@ -119,18 +112,27 @@ function initalizeapp(){
     projectsContainer.addEventListener("click", (e) => {
         //console.log(`Target: ${e.target.closest(".project")}`);// Target is the actual element that calls the listener
         //console.log(`CurrentTarget ${e.currentTarget}`) //current is the element that wants/created the listener
-        
-        //Erases whatever is in main
-        main.replaceChildren();
 
-        const projectElement = e.target.closest(".project");
-        // this is the id of the selected project, projectElement.dataset.id, how do i get the corresponding id of the project?
-        for(let i = 0; i < projects.length; i++){
-            if(projectElement.dataset.id === projects[i].id){
-                selectedProject = projects[i];
-            }
+        const projectElement = e.target.closest(".project-button");
+        const deleteElement = e.target.closest(".delete-project-button");
+
+        if(deleteElement){
+            //This returns the project id found in the button dataset
+            const project = projects.find(p => p.id === deleteElement.dataset.id);
+            deleteProject(project);
+            renderCurrentView();
         }
-        main.append(renderProject(selectedProject));
+
+        if(projectElement){
+            // this is the id of the selected project, projectElement.dataset.id, how do i get the corresponding id of the project?
+            for(let i = 0; i < projects.length; i++){
+                if(projectElement.dataset.id === projects[i].id){
+                    selectedProject = projects[i];
+                }
+            }
+            renderCurrentView();
+        }
+        return;
     })
 
     sidebar.append(projectsContainer, newProjectButton);// this should be called whenever the projects sidebar is called
@@ -138,17 +140,36 @@ function initalizeapp(){
 
     body.replaceChildren();
     body.append(sidebar,main, projectForm, todoForm,newTodoButton);
+
+    function renderCurrentView(){
+        main.replaceChildren();
+        main.append(renderProject(selectedProject));
+
+        const updatedProjects = renderProjects(projects);
+        projectsContainer.replaceChildren(...updatedProjects.children);
+    }
 }
 //Below here was done hapzardously 
-function renderCurrentView(){
 
-}
 function deleteProject(project){
+    if(projects.length <= 1){
+        alert("At least one project should exist");
+        console.warn("At least one project should exist");
+        return;
+    }
+
     //It needs to be deleted from the projects array as well as from the dom
-    const index = projects.indexOf(project.id);
+    const index = projects.findIndex((p) => p.id === project.id);
+    const isSelected = project === selectedProject;
+
     if (index !== -1) {
         projects.splice(index, 1);
+
+        if(isSelected){
+            selectedProject = projects[0];
+        }
     }
+
 }
 function editProject(project){
     //Reuse the project form to get the input

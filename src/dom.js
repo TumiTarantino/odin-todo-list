@@ -92,17 +92,27 @@ function createProjectContainer(project){
 }
 
 function createAProject(project){
-    const projectDiv = document.createElement("button");
-    projectDiv.classList.add("project");
-    projectDiv.dataset.id = project.id;
-    projectDiv.textContent = project.title
+    const projectDiv2 = document.createElement("div");
+    const projectButton = document.createElement("button");
+    const deleteButton = deleteProjectButton();
 
-    //const projectTitle = document.createElement("p");
-    //projectTitle.textContent = project.title
+    projectDiv2.classList.add("project");
+    projectButton.classList.add("project-button");
 
-    //projectDiv.append(projectTitle);
+    projectButton.textContent = project.title;
+    projectButton.dataset.id = project.id;
+    deleteButton.dataset.id = project.id;
 
-    return projectDiv;
+    projectDiv2.append(projectButton,deleteButton);
+
+    return projectDiv2;
+}
+
+function deleteProjectButton(){
+    const deleteButton = document.createElement("button");
+    deleteButton.classList.add("delete-project-button");
+    deleteButton.textContent = "X"
+    return deleteButton;
 }
 function createATodo(todo){
     const task = document.createElement("div");
@@ -242,4 +252,4 @@ function renderProjects(projects){ //this 'projects' dont exist yet, just be awa
     return projectsContainer;
     
 }
-export {createSidebar, createMain, createTasksContainer, createATodo, createCreateProjectButton, createProjectForm, createTodoButton, createTodoForm,renderProject, renderProjects};
+export {createSidebar, createMain, createTasksContainer, createATodo, createCreateProjectButton, createProjectForm, deleteProjectButton,createTodoButton, createTodoForm,renderProject, renderProjects};
