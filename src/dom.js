@@ -134,8 +134,12 @@ function createATodo(todo){
     const checklist = document.createElement("input"); 
     checklist.type = "checkbox";
     checklist.checked = todo.checklist;
+    checklist.classList.add("todo-checklist");
+
+    const deleteButton = deleteATodoButton();
+    deleteButton.dataset.id = todo.id;
     
-    task.append(title,description,dueDate,priority,checklist);
+    task.append(title,description,dueDate,priority,checklist, deleteButton);
 
     return task;
 
@@ -230,6 +234,13 @@ function createTodoForm(){
         submitBtn);
     dialog.append(form)
     return dialog;
+}
+
+function deleteATodoButton(){
+    const deleteButton = document.createElement("button");
+    deleteButton.classList.add("delete-todo-button");
+    deleteButton.textContent = "Delete";
+    return deleteButton;
 }
 function renderProject(project){
     const taskContainer = createTasksContainer();

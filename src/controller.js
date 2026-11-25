@@ -45,8 +45,7 @@ function initalizeapp(){
     const formTodo = todoForm.querySelector("#todoForm");
 
     
-
-    //Event listeners
+///////////////////// Event listeners ///////////////////////////////////////////////////////////////////////////
    
 
     formTodo.addEventListener("submit", (e) => {
@@ -135,6 +134,40 @@ function initalizeapp(){
         return;
     })
 
+    //Adding to main since tasks and project containers keep disappearing
+    main.addEventListener("click", (e) => {
+        const deleteElement = e.target.closest(".delete-todo-button");
+        if (!deleteElement){
+            return;
+        }
+
+        const todo = selectedProject.todos.find((todo) => todo.id === deleteElement.dataset.id);
+        if(!todo){
+            console.warn("Todo not found.");
+            return;
+        }
+
+        deleteTodo(selectedProject,todo);
+        renderCurrentView();
+    });
+
+    main.addEventListener("change", (e) => {
+        const taskElement = e.target.closest(".task");
+        if (!taskElement){
+            return;
+        }
+        const todo = selectedProject.todos.find((todo) => todo.id === taskElement.dataset.id);
+        if(!todo){
+            console.warn("Todo not found.");
+            return;
+        }
+
+        todo.toggleChecklist();
+        console.log(todo);
+        renderCurrentView();
+    });
+////////////////////End of event Listeners////////////////////////////////////////////////////////////////////////////////
+
     sidebar.append(projectsContainer, newProjectButton);// this should be called whenever the projects sidebar is called
     main.append(renderProject(selectedProject)); // the should call the relevant project at the start
 
@@ -169,7 +202,10 @@ function deleteProject(project){
             selectedProject = projects[0];
         }
     }
+}
 
+function deleteTodo(project, todo){
+    project.removeTodo(todo);
 }
 function editProject(project){
     //Reuse the project form to get the input

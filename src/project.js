@@ -13,7 +13,20 @@ export default class Project{
         }
         this.todos.push(todo);
     }
-    //removeTodo(){} //this needs to delete based the uuid, for now i think its cool to leave since dataset hasnt been set in html yet
+    removeTodo(todo){
+        if(!(todo instanceof Todo)){
+            throw new TypeError("Expected a Todo object/instance");
+        }
+        const index = this.todos.findIndex((p) => p.id === todo.id);
+        if (index !== -1) {
+            this.todos.splice(index, 1);
+            return true;
+        }
+        else{
+            console.warn("Todo not deleted");
+            return false;
+        }
+    }
     print(){
         console.log(this.todos);
     }
