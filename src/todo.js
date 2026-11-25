@@ -53,10 +53,6 @@ export default class Todo{
     changePriority(priority){
         validatePriority(priority);
 
-        if (!["high", "medium", "low"].includes(priority.toLowerCase())) {
-            throw new Error("Priority should be 'high', 'medium', 'low'.");
-        }
-
         this.priority = priority.toLowerCase();
     }
     update(title, description, dueDate, priority, checklist){
