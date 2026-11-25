@@ -43,6 +43,7 @@ function initalizeapp(){
     const newTodoButton = createTodoButton();
     const todoForm = createTodoForm();
     const formTodo = todoForm.querySelector("#todoForm");
+    let editingTodo = null;
 
     
 ///////////////////// Event listeners ///////////////////////////////////////////////////////////////////////////
@@ -60,13 +61,19 @@ function initalizeapp(){
         //Allows checklist to be submitted as a bool
         const checklist = formTodo.elements.checklist.checked;
 
-        //Creates a new Project object
-        const newTodo = new Todo(data.title, data.description, data.dueDate, data.priority, checklist); 
+        if(editingTodo === null){
+            //Creates a new Project object
+            const newTodo = new Todo(data.title, data.description, data.dueDate, data.priority, checklist); 
+            
+            //Appends project to the projects array
+            console.log(newTodo);
+            selectedProject.addTodo(newTodo);
+        }
+        else{
+            editingTodo.update(data.title, data.description, data.dueDate, data.priority, checklist);
+        }
         
-        //Appends project to the projects array
-        console.log(newTodo);
-        selectedProject.addTodo(newTodo);
-        
+        editingTodo = null;
 
         renderCurrentView();
         //Closes dialog
@@ -76,6 +83,8 @@ function initalizeapp(){
         formTodo.reset();
     })
     newTodoButton.addEventListener("click", () => {
+        editingTodo = null; // Just incase it has any old todo ref
+        formTodo.reset();
         todoForm.showModal();
     })
 
@@ -88,15 +97,15 @@ function initalizeapp(){
         // Convert to a standard JavaScript object
         const data = Object.fromEntries(projectData);
 
-        //Creates a new Project object
-        const newProject = new Project(data.title); 
-        
-        //Appends project to the projects array
-        projects.push(newProject);
-        console.log(projects);
+            //Creates a new Project object
+            const newProject = new Project(data.title);
+            //Appends project to the projects array
+            projects.push(newProject);
+            console.log(projects);
 
-        //Selects new project as the current project and renders it
-        selectedProject = newProject;
+            //Selects new project as the current project and renders it
+            selectedProject = newProject;
+         
         renderCurrentView();
 
         //Closes dialog
@@ -152,6 +161,10 @@ function initalizeapp(){
     });
 
     main.addEventListener("change", (e) => {
+        const checklistElement = e.target.closest(".todo-checklist");
+        if (!checklistElement){ 
+            return;
+        }
         const taskElement = e.target.closest(".task");
         if (!taskElement){
             return;
@@ -165,6 +178,28 @@ function initalizeapp(){
         todo.toggleChecklist();
         console.log(todo);
         renderCurrentView();
+    });
+
+    main.addEventListener("click", (e) => {
+        const taskElement = e.target.closest(".edit-todo-button");
+        if(!taskElement){
+            return;
+        }
+        const todoId = taskElement.closest(".task").dataset.id;
+        const todo = selectedProject.todos.find((todo) => todo.id === todoId);
+        if(!todo){
+            console.warn("Todo not found");
+            return;
+        }
+        editingTodo = todo;
+        formTodo.elements.title.value = todo.title;
+        formTodo.elements.description.value = todo.description;
+        formTodo.elements.dueDate.value = todo.dueDate;
+        formTodo.elements.priority.value = todo.priority;
+        formTodo.elements.checklist.checked = todo.checklist;
+
+        todoForm.showModal();
+
     });
 ////////////////////End of event Listeners////////////////////////////////////////////////////////////////////////////////
 

@@ -138,8 +138,11 @@ function createATodo(todo){
 
     const deleteButton = deleteATodoButton();
     deleteButton.dataset.id = todo.id;
+
+    const editButton = editTodoButton();//I dont think it needs the id
+
     
-    task.append(title,description,dueDate,priority,checklist, deleteButton);
+    task.append(title,description,dueDate,priority,checklist, editButton, deleteButton);
 
     return task;
 
@@ -150,6 +153,13 @@ function createTodoButton(){
     todoButton.classList.add("todo-button");
     todoButton.textContent = "+ New Todo";
     return todoButton;
+}
+
+function editTodoButton(){
+    const editButton = document.createElement("button");
+    editButton.classList.add("edit-todo-button");
+    editButton.textContent = "Edit";
+    return editButton;
 }
 
 function createTodoForm(){
