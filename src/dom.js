@@ -210,12 +210,20 @@ function createTodoForm(){
     todoPriorityLabel.htmlFor = 'todo-priority';
 
     //Create an input associated with relevent label
-    const todoPriorityInput = document.createElement('input');
-    todoPriorityInput.type = 'text';
-    todoPriorityInput.placeholder = 'high, medium or low';
+    const todoPriorityInput = document.createElement('select');
     todoPriorityInput.id = 'todo-priority';
     todoPriorityInput.name = 'priority';
     todoPriorityInput.required = true;
+
+    const priorties = ["low", "medium", "high"];
+    for(let i = 0; i < priorties.length; i++){
+        const option = document.createElement("option");
+        option.value = priorties[i];
+        option.textContent = priorties[i].charAt(0).toUpperCase()+ priorties[i].slice(1);
+        todoPriorityInput.append(option);
+    }
+    //Sets default value
+    todoPriorityInput.value = "medium";
 
     // Creates a label for relevant input
     const todoChecklistLabel = document.createElement('label');
