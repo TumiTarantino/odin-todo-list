@@ -171,3 +171,85 @@ aside{
     border-radius: 50%;
     transition: all 0.3s ease;
 }
+
+/* DIALOGS */
+dialog {
+    margin: auto;
+    width: min(90%, 450px);
+    padding: 2rem;
+    border-radius: var(--border-radius-3);
+    background-color: var(--color-white);
+    color: var(--color-dark);
+    box-shadow: var(--box-shadow);
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+}
+
+/* FORM LAYOUT */
+dialog form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+dialog form h2 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+dialog label {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* INPUTS */
+dialog input:not([type="checkbox"]),
+dialog textarea,
+dialog select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-info-dark);
+    border-radius: var(--border-radius-1);
+    background-color: var(--color-background);
+    color: var(--color-dark);
+    font: inherit;
+}
+
+dialog textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+dialog input:focus,
+dialog textarea:focus,
+dialog select:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* CHECKBOX */
+dialog input[type="checkbox"] {
+    accent-color: var(--color-primary);
+}
+
+/* FORM BUTTONS */
+dialog button {
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius-1);
+    background-color: var(--color-dark-variant);
+    color: var(--color-white);
+    cursor: pointer;
+    font: inherit;
+    transition: background-color 0.2s ease;
+}
+
+dialog button:hover {
+    background-color: var(--color-primary);
+}
+
+dialog button:active {
+    background-color: var(--color-primary-variant);
+}
