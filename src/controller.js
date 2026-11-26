@@ -8,28 +8,27 @@ Each project should be a clickable button which will display the todos in that p
 import Todo from './todo.js'
 import Project from './project.js'
 import { createSidebar, createMain, createTasksContainer, createATodo, createCreateProjectButton, createProjectForm, deleteProjectButton,createTodoButton, createTodoForm, renderProject, renderProjects} from "./dom.js";
+import { saveProjects, loadProjects } from './storage.js';
 
-const myTask = new Todo("BossTee", "I am working on it", "2026-11-22", "high", true);
-const myTask2 = new Todo("Cole", "arr", "2026-54-22", "MEDIUM", true);
-const myTask3 = new Todo("adha", "chaining day", "2122-13-88", "low");
+const myTask = new Todo("ToDo List", "I am working on it", "2026-11-22", "high", true);
+const myTask2 = new Todo("Gym", "Push-Ups, Pull-Ups, Lunges", "2026-11-22", "MEDIUM", true);
 
-const theTask = new Todo("BossTee", "I am working on it", "2026-11-22", "high", true);
-const theTask2 = new Todo("Cole", "arr", "2026-54-22", "MEDIUM", true);
-const theTask3 = new Todo("adha", "chaining day", "2122-13-88", "low");
-
-const project1 = new Project("atatat");
-const project2 = new Project("Drive");
+const project1 = new Project("Today");
 
 project1.addTodo(myTask);
 project1.addTodo(myTask2);
-project1.addTodo(myTask3);
 
-project2.addTodo(theTask);
-project2.addTodo(theTask2);
-project2.addTodo(theTask3);
+const savedProjects = loadProjects();
 
-const projects = [project1,project2];
-let selectedProject = project1;
+let projects;
+
+if (savedProjects && savedProjects.length > 0) {
+    projects = savedProjects;
+} else {
+    projects = [project1];
+}
+
+let selectedProject = projects[0];
 
 //Functions
 function initalizeapp(){
@@ -44,11 +43,10 @@ function initalizeapp(){
     const todoForm = createTodoForm();
     const formTodo = todoForm.querySelector("#todoForm");
     let editingTodo = null;
-
     
 ///////////////////// Event listeners ///////////////////////////////////////////////////////////////////////////
    
-
+    // This does one of two things: create a new todo or edit a todo, it allows for the todo form to do both without repeating form logic
     formTodo.addEventListener("submit", (e) => {
         e.preventDefault();
 
@@ -72,6 +70,9 @@ function initalizeapp(){
         else{
             editingTodo.update(data.title, data.description, data.dueDate, data.priority, checklist);
         }
+
+        //Saves current state of projects
+        saveProjects(projects);
         
         editingTodo = null;
 
@@ -82,13 +83,16 @@ function initalizeapp(){
         //Emptys the contents of the form
         formTodo.reset();
     })
+
+    //Opens the dialog for creating a todo
     newTodoButton.addEventListener("click", () => {
         editingTodo = null; // Just incase it has any old todo ref
         formTodo.reset();
         todoForm.showModal();
     })
 
-     form.addEventListener("submit", (e) => {
+    //This creates a new project from a form
+    form.addEventListener("submit", (e) => {
         e.preventDefault();
 
         // Pass the submitted form (event.target) to FormData
@@ -97,14 +101,18 @@ function initalizeapp(){
         // Convert to a standard JavaScript object
         const data = Object.fromEntries(projectData);
 
-            //Creates a new Project object
-            const newProject = new Project(data.title);
-            //Appends project to the projects array
-            projects.push(newProject);
-            console.log(projects);
+        //Creates a new Project object
+        const newProject = new Project(data.title);
+            
+        //Appends project to the projects array
+        projects.push(newProject);
+        console.log(projects);
 
-            //Selects new project as the current project and renders it
-            selectedProject = newProject;
+        //Selects new project as the current project and renders it
+        selectedProject = newProject;
+
+        //Saves current state of projects
+        saveProjects(projects);
          
         renderCurrentView();
 
@@ -117,6 +125,8 @@ function initalizeapp(){
     newProjectButton.addEventListener("click", () => {
         projectForm.showModal();
     })
+    
+    //This listeners does one of two things: deletes a project or it renders the selected project onto main
     projectsContainer.addEventListener("click", (e) => {
         //console.log(`Target: ${e.target.closest(".project")}`);// Target is the actual element that calls the listener
         //console.log(`CurrentTarget ${e.currentTarget}`) //current is the element that wants/created the listener
@@ -127,8 +137,15 @@ function initalizeapp(){
         if(deleteElement){
             //This returns the project id found in the button dataset
             const project = projects.find(p => p.id === deleteElement.dataset.id);
-            deleteProject(project);
-            renderCurrentView();
+            
+            if(deleteProject(project)){
+                //Saves current state of projects
+                saveProjects(projects);
+
+                renderCurrentView();
+            }
+
+            
         }
 
         if(projectElement){
@@ -144,6 +161,7 @@ function initalizeapp(){
     })
 
     //Adding to main since tasks and project containers keep disappearing
+    // Deletes a todo
     main.addEventListener("click", (e) => {
         const deleteElement = e.target.closest(".delete-todo-button");
         if (!deleteElement){
@@ -156,10 +174,20 @@ function initalizeapp(){
             return;
         }
 
-        deleteTodo(selectedProject,todo);
+        if(deleteTodo(selectedProject,todo) === true){
+            //Saves current state of projects
+            saveProjects(projects);
+        }
+        else{
+            return;
+        }
+
+        
+
         renderCurrentView();
     });
 
+    //Toggles the todo checklist
     main.addEventListener("change", (e) => {
         const checklistElement = e.target.closest(".todo-checklist");
         if (!checklistElement){ 
@@ -176,10 +204,14 @@ function initalizeapp(){
         }
 
         todo.toggleChecklist();
-        console.log(todo);
+
+        //Saves current state of projects
+        saveProjects(projects);
+
         renderCurrentView();
     });
 
+    //Edits a todo
     main.addEventListener("click", (e) => {
         const taskElement = e.target.closest(".edit-todo-button");
         if(!taskElement){
@@ -216,6 +248,7 @@ function initalizeapp(){
         const updatedProjects = renderProjects(projects);
         projectsContainer.replaceChildren(...updatedProjects.children);
     }
+
 }
 //Below here was done hapzardously 
 
@@ -223,7 +256,7 @@ function deleteProject(project){
     if(projects.length <= 1){
         alert("At least one project should exist");
         console.warn("At least one project should exist");
-        return;
+        return false;
     }
 
     //It needs to be deleted from the projects array as well as from the dom
@@ -237,10 +270,11 @@ function deleteProject(project){
             selectedProject = projects[0];
         }
     }
+    return true;
 }
 
 function deleteTodo(project, todo){
-    project.removeTodo(todo);
+    return project.removeTodo(todo);
 }
 function editProject(project){
     //Reuse the project form to get the input

@@ -199,7 +199,7 @@ function createTodoForm(){
 
     //Create an input associated with relevent label
     const todoDateInput = document.createElement('input');
-    todoDateInput.type = 'text'; // this probaly needs to change a more appropriate format
+    todoDateInput.type = 'date'; // this probaly needs to change a more appropriate format
     todoDateInput.id = 'todo-date';
     todoDateInput.name = 'dueDate';
     todoDateInput.required = true;
