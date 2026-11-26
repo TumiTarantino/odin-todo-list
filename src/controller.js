@@ -236,14 +236,14 @@ function initalizeapp(){
 ////////////////////End of event Listeners////////////////////////////////////////////////////////////////////////////////
 
     sidebar.append(projectsContainer, newProjectButton);// this should be called whenever the projects sidebar is called
-    main.append(renderProject(selectedProject)); // the should call the relevant project at the start
+    main.append(renderProject(selectedProject),newTodoButton); // the should call the relevant project at the start
 
     body.replaceChildren();
-    body.append(sidebar,main, projectForm, todoForm,newTodoButton);
+    body.append(sidebar,main, projectForm, todoForm);
 
     function renderCurrentView(){
         main.replaceChildren();
-        main.append(renderProject(selectedProject));
+        main.append(renderProject(selectedProject),newTodoButton);
 
         const updatedProjects = renderProjects(projects);
         projectsContainer.replaceChildren(...updatedProjects.children);
